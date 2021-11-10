@@ -8,6 +8,7 @@ y <- heights$sex
 x <- heights$height
 
 set.seed(2007)
+
 test_index <- createDataPartition(y, times = 1, p = 0.5, list = FALSE)
 
 
@@ -25,3 +26,31 @@ heights %>% group_by(sex) %>% summarise(mean(height), sd(height))
 y_hat <- ifelse(x > 62, "Male", "Female") %>% factor(levels = levels(test_set$sex))
 
 mean(y == y_hat)
+
+
+cat("\014")
+
+cutoff <- seq(61,70)
+accuracy <- map_dbl(cutoff, function(x){
+  y_hat <- ifelse(train_set$height > x, "Male", "Female") %>% factor(levels = levels(test_set$sex))
+  mean(y_hat == train_set$sex)
+})
+
+cat("\014")
+best_cutoff <- cutoff[which.max(accuracy)]
+
+y_hat <- ifelse(test_set$height > best_cutoff, "Male", "Female") %>% factor(levels = levels(test_set$sex))
+
+y_hat <- factor(y_hat)
+
+mean(y_hat == test_set$sex)
+
+cat("\014")
+
+table(predicted = y_hat, actual = test_set$sex)
+
+test_set %>% mutate(y_hat = y_hat) %>% group_by(sex) %>% summarise(accuracy = mean(y_hat == sex))
+
+
+cm <- confusionMatrix(data = y_hat, reference = test_set$sex)
+cm$overall["Accuracy"]
