@@ -51,6 +51,24 @@ table(predicted = y_hat, actual = test_set$sex)
 
 test_set %>% mutate(y_hat = y_hat) %>% group_by(sex) %>% summarise(accuracy = mean(y_hat == sex))
 
-
+cat("\014")
 cm <- confusionMatrix(data = y_hat, reference = test_set$sex)
 cm$overall["Accuracy"]
+
+cat("\014")
+
+cutoff <- seq(61, 70)
+F_1 <- map_dbl(cutoff, function(x){
+  y_hat <- ifelse(train_set$height > x, "Male", "Female") %>% factor(levels = levels(test_set$sex))
+  F_meas(data = y_hat, reference = factor(train_set$sex))
+})
+
+data.frame(cutoff, F_1) %>% ggplot(aes(cutoff, F_1)) + geom_point() + geom_line()
+
+max(F_1)
+best_cutoff <- cutoff[which.max(F_1)]
+best_cutoff
+
+y_hat <- ifelse(test_set$height > best_cutoff, "Male", "Female") %>% factor(levels = levels(test_set$sex))
+confusionMatrix(data = y_hat, reference = test_set$sex)
+
