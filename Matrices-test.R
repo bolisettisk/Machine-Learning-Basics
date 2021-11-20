@@ -38,9 +38,20 @@ colMeans(x)
 
 cat("\014")
 #Q6
-
-
-
+data("mnist_27")
+if(!exists("mnist")) mnist <- read_mnist()
+x <- mnist$train$images[1:1000,]
+y <- mnist$train$labels[1:1000]
+xm <- mean(x > 50 & x < 205)
+xm
+# filt <- function(x){
+#   ifelse((x > 50 & x < 205), 1, 0)
+# }
+# xf <- filt(x)
+# xf <- rowMeans(xf)
+# tibble(labels = as.factor(y), rows = xf) %>% qplot(as.factor(y), xf, data = ., geom = "boxplot")
+# xf1 <- rowMeans(x > 50 & x < 205)
+# tibble(labels = as.factor(y), rows = xf1) %>% qplot(as.factor(y), xf, data = ., geom = "boxplot")
 
 
 
