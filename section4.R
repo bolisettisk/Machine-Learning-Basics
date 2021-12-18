@@ -76,6 +76,8 @@ image(1:28, 1:28, matrix(d_492, 28, 28))
 cat("\014")
 #logistic regression
 library(caret)
+mnist_27$test %>% ggplot(aes(x_1, x_2, color = y)) + geom_point()
+
 fit_glm <- glm(y~x_1+x_2, data=mnist_27$train, family="binomial")
 p_hat_logistic <- predict(fit_glm, mnist_27$test)
 y_hat_logistic <- factor(ifelse(p_hat_logistic > 0.5, 7, 2))
@@ -87,6 +89,7 @@ fit_lm <- mnist_27$train %>%
 p_hat_lm <- predict(fit_lm, mnist_27$test)
 y_hat_lm <- factor(ifelse(p_hat_lm > 0.5, 7, 2))
 confusionMatrix(y_hat_lm, mnist_27$test$y)$overall["Accuracy"]
+
 
 
 
