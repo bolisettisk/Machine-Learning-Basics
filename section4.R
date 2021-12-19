@@ -91,6 +91,9 @@ y_hat_lm <- factor(ifelse(p_hat_lm > 0.5, 7, 2))
 confusionMatrix(y_hat_lm, mnist_27$test$y)$overall["Accuracy"]
 
 
+fit_knn <- knn3(y ~ ., data = mnist_27$train, k = 5)
+y_hat_knn <- predict(fit_knn, mnist_27$test, type = "class")
+confusionMatrix(y_hat_knn, mnist_27$test$y)$overall["Accuracy"]
 
 
 
