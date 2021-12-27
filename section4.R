@@ -89,9 +89,20 @@ y_hat_lm <- factor(ifelse(p_hat_lm > 0.5, 7, 2))
 confusionMatrix(y_hat_lm, mnist_27$test$y)$overall["Accuracy"]
 
 
+cat("\014")
 
+params <- mnist_27$train %>% group_by(y) %>% summarize(avg_1 = mean(x_1), avg_2 = mean(x_2), sd_1= sd(x_1), sd_2 = sd(x_2), r = cor(x_1, x_2))
 
+params
 
+mnist_27$train %>% mutate(y = factor(y)) %>% 
+  ggplot(aes(x_1, x_2, fill = y, color=y)) + 
+  geom_point(show.legend = FALSE) + 
+  stat_ellipse(type="norm", lwd = 1.5)
+
+params <- params %>% mutate(sd_1 = mean(sd_1), sd_2 = mean(sd_2), r = mean(r))
+
+params
 
 
 
