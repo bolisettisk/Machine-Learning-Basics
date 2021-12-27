@@ -76,6 +76,8 @@ image(1:28, 1:28, matrix(d_492, 28, 28))
 cat("\014")
 #logistic regression
 library(caret)
+mnist_27$test %>% ggplot(aes(x_1, x_2, color = y)) + geom_point()
+
 fit_glm <- glm(y~x_1+x_2, data=mnist_27$train, family="binomial")
 p_hat_logistic <- predict(fit_glm, mnist_27$test)
 y_hat_logistic <- factor(ifelse(p_hat_logistic > 0.5, 7, 2))
@@ -89,6 +91,7 @@ y_hat_lm <- factor(ifelse(p_hat_lm > 0.5, 7, 2))
 confusionMatrix(y_hat_lm, mnist_27$test$y)$overall["Accuracy"]
 
 
+<<<<<<< HEAD
 cat("\014")
 
 params <- mnist_27$train %>% group_by(y) %>% summarize(avg_1 = mean(x_1), avg_2 = mean(x_2), sd_1= sd(x_1), sd_2 = sd(x_2), r = cor(x_1, x_2))
@@ -103,6 +106,15 @@ mnist_27$train %>% mutate(y = factor(y)) %>%
 params <- params %>% mutate(sd_1 = mean(sd_1), sd_2 = mean(sd_2), r = mean(r))
 
 params
+=======
+fit_knn <- knn3(y ~ ., data = mnist_27$train, k = 5)
+y_hat_knn <- predict(fit_knn, mnist_27$test, type = "class")
+confusionMatrix(y_hat_knn, mnist_27$test$y)$overall["Accuracy"]
+
+
+
+
+>>>>>>> 6b88060f5ef1015c6b08c7c230657aa904327633
 
 
 
