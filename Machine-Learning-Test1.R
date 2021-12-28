@@ -63,8 +63,6 @@ test_data <- data.frame(x = test_x, y = test_y)
 
 k <- seq(1, 11, 2)
 
-
-
 cat("\014")
 accuracy1 <- map_df(k, function(z){
   fit <- knn3(y ~ ., data = train_data, k = z)

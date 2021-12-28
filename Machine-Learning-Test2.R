@@ -59,7 +59,7 @@ cat("\014")
 # Ans: We used the entire dataset to select the columns used in the model.
 
 
-# Q4.2.1.6
+# Q4.2.1.7
 cat("\014")
 data(tissue_gene_expression)
 k = seq(1,7,2)
