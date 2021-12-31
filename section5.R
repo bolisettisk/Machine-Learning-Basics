@@ -47,18 +47,24 @@ ggplot(train_rpart)
 plot(train_rpart$finalModel, margin = 0.1)
 text(train_rpart$finalModel, cex = 0.75)
 
-polls_2008 %>% 
-  mutate(y_hat = predict(train_rpart)) %>% 
+polls_2008 %>%
+  mutate(y_hat = predict(train_rpart)) %>%
   ggplot() +
   geom_point(aes(day, margin)) +
   geom_step(aes(day, y_hat), col="red")
 
-# prune the tree 
+# prune the tree
 pruned_fit <- prune(fit, cp = 0.05)
 plot(pruned_fit, margin = 0.1)
 text(pruned_fit, cex = 0.75)
 
+data("mnist_27")
+train_rpart <- train(y ~ ., method = "rpart", tuneGrid = data.frame(cp = seq(0.0, 0.1, len = 25)), data = mnist_27$train)
 
+plot(train_rpart)
+
+y_hat <- predict(train_rpart, mnist_27$test)
+confusionMatrix(y_hat, mnist_27$test$y)$overall["Accuracy"]
 
 
 
