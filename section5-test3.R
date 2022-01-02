@@ -38,6 +38,17 @@ y_hat <- sample(c(0,1), length(test_index), replace = TRUE, prob = NULL) %>% fac
 mean(y_hat == test_set$Survived)
 
 
+# Q3a
+cat("\014")
+train_set %>% filter(Sex == "female") %>% summarise(mean(Survived == 1))
+train_set %>% filter(Sex == "male") %>% summarise(mean(Survived == 1))
+
+
+# Q3a
+cat("\014")
+test_set %>% mutate(predt = ifelse(Sex == "female", 1, 0)) %>% summarise(mean(predt == Survived))
+
+
 
 
 
