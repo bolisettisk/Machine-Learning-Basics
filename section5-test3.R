@@ -49,6 +49,23 @@ cat("\014")
 test_set %>% mutate(predt = ifelse(Sex == "female", 1, 0)) %>% summarise(mean(predt == Survived))
 
 
+# Q4a
+cat("\014")
+train_set %>% group_by(Pclass) %>% summarise(prop.table(table(Survived)))
+
+
+
+# Q4b
+cat("\014")
+test_set %>% mutate(predt = ifelse(Pclass == 1, 1, 0)) %>% summarise(mean(predt == Survived))
+
+
+
+# Q4c
+cat("\014")
+train_set %>% group_by(Sex, Pclass) %>% summarise(prop.table(table(Survived)))
+
+
 
 
 
