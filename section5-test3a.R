@@ -66,6 +66,47 @@ cat("\014")
 train_set %>% group_by(Sex, Pclass) %>% summarise(prop.table(table(Survived)))
 
 
+# Q4d
+cat("\014")
+test_set %>% mutate(predt = ifelse((Sex == "female" & (Pclass == 1 | Pclass == 2)), 1, 0)) %>% summarise(mean(predt == Survived))
+
+
+# Q5a
+cat("\014")
+y_hat2 <- ifelse(test_set$Sex =="female", 1, 0) %>% factor(levels = levels(test_set$Survived))
+y_hat3 <- ifelse(test_set$Pclass == 1, 1, 0) %>% factor(levels = levels(test_set$Survived))
+y_hat4 <- ifelse((test_set$Sex == "female" & (test_set$Pclass == 1 | test_set$Pclass == 2)), 1, 0) %>% factor(levels = levels(test_set$Survived))
+cat("\014")
+c2 <- confusionMatrix(data=y_hat2,reference=test_set$Survived)
+c3 <- confusionMatrix(data=y_hat3,reference=test_set$Survived)
+c4 <- confusionMatrix(data=y_hat4,reference=test_set$Survived)
+cat("\014")
+c2$byClass[c("Sensitivity","Specificity", "Prevalence")]
+c3$byClass[c("Sensitivity","Specificity", "Prevalence")]
+c4$byClass[c("Sensitivity","Specificity", "Prevalence")]
+
+
+# Q5a and Q5b
+(c2$byClass["Sensitivity"] + c2$byClass["Specificity"])/2
+(c3$byClass["Sensitivity"] + c3$byClass["Specificity"])/2
+(c4$byClass["Sensitivity"] + c4$byClass["Specificity"])/2
+
+
+# Q6
+cat("\014")
+F_meas(data = y_hat2, reference = factor(test_set$Survived))
+F_meas(data = y_hat3, reference = factor(test_set$Survived))
+F_meas(data = y_hat4, reference = factor(test_set$Survived))
+                   
+                     
+
+
+
+
+
+   
+  
+  
 
 
 
