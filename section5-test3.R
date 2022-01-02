@@ -44,7 +44,7 @@ train_set %>% filter(Sex == "female") %>% summarise(mean(Survived == 1))
 train_set %>% filter(Sex == "male") %>% summarise(mean(Survived == 1))
 
 
-# Q3a
+# Q3b
 cat("\014")
 test_set %>% mutate(predt = ifelse(Sex == "female", 1, 0)) %>% summarise(mean(predt == Survived))
 
