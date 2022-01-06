@@ -40,6 +40,26 @@ length(col_index)
 colnames(x) <- 1:ncol(mnist$train$images)
 colnames(x_test) <- colnames(x)
 
+# Commented since it takes to too long to execute
+# control <- trainControl(method = "cv", number = 10, p = 0.9)
+# train_knn <- train(x[, col_index], y, method = "knn", tuneGrid = data.frame(k = c(3, 5, 7)), trControl = control)
+# 
+# cat("\014")
+# train_knn
+
+n <- 1000
+b <- 2
+index <- sample(nrow(x), n)
+control <- trainControl(method = "cv", number = b, p = 0.9)
+train_knn <- train(x[index, col_index], y[index], method = "knn", tuneGrid = data.frame(k = c(3, 5, 7)), trControl = control)
+
+cat("\014")
+train_knn # Result: Accuracy was used to select the optimal model using the largest value. The final value used for the model was k = 3.
+
+fit_knn <- knn3(x[, col_index], y, k = 3)
+y_hat_knn <- predict(fit_knn, x_test[, col_index], type = "class")
+cm <- confusionMatrix(y_hat_knn, factor(y_test))
+cm$overall["Accuracy"]
 
 
 
