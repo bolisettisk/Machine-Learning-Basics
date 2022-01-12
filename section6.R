@@ -5,6 +5,8 @@ library(caret)
 library(ggplot2)
 library(rpart)
 library(matrixStats)
+library(randomForest)
+library(Rborist)
 
 if(!exists("mnist")) mnist <- read_mnist()
 
@@ -61,11 +63,33 @@ y_hat_knn <- predict(fit_knn, x_test[, col_index], type = "class")
 cm <- confusionMatrix(y_hat_knn, factor(y_test))
 cm$overall["Accuracy"]
 
+cat("\014")
+cm$byClass[,1:2]
 
 
+cat("\014")
+control <- trainControl(method = "cv", number = 5, p = 0.8)
+grid <- expand.grid(minNode = c(1,5), predFixed = c(10, 15, 25, 35, 50))
 
+# Commented since it takes to too long to execute
+# train_rf <- train(x[ , col_index], y, method = "Rborist", nTree = 50, trControl = control, tuneGrid = grid, nSamp = 5000)
 
+ggplot(train_rf)
+train_rf$bestTune
 
+fit_rf <- Rborist(x[ , col_index], y, nTree = 1000, minNode = train_rf$bestTune$minNode, predFixed = train_rf$bestTune$predFixed)
+
+cat("\014")
+y_hat_rf <- factor(levels(y)[predict(fit_rf, x_test[ ,col_index])$yPred])
+cm <- confusionMatrix(y_hat_rf, y_test)
+cm$overall["Accuracy"]
+
+rafalib::mypar(3,4)
+for(i in 1:12){
+  image(matrix(x_test[i,], 28, 28)[, 28:1], 
+        main = paste("Our prediction:", y_hat_rf[i]),
+        xaxt="n", yaxt="n")
+}
 
 
 
